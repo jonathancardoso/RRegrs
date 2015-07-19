@@ -2760,7 +2760,7 @@ ENETreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
 # RRegrs MAIN FUNCTION 
 ###############################################################################################
 
-RRegrs<- function(DataFileName="ds.House.csv",PathDataSet="DataResults",noCores=1,
+RRegrs <- function(DataFileName="ds.House.csv",PathDataSet="DataResults",noCores=1,
   ResAvgs="RRegsResAvgs.csv",ResBySplits="RRegrsResAllSplits.csv",ResBest="RRegrsResBest.csv",
   fDet="T",fFilters="F",fScaling="T",fRemNear0Var="T",fRemCorr="T",
   fLM="T",fGLM="T",fPLS="T",fLASSO="T",fSVRM="T",fNN="T",fRF="T",fRFRFE="T",fSVMRFE="T",fENET="T",
@@ -2816,10 +2816,11 @@ RRegrs<- function(DataFileName="ds.House.csv",PathDataSet="DataResults",noCores=
   #------------------------------------------
   # Write parameter file
   #------------------------------------------
+  dir.create(PathDataSet, showWarnings = FALSE)
   ParamFile <- file.path(PathDataSet, "Parameters.csv") # file to output the parameters
 
   # define a data frame with all parameters of the current calculation
-  Params.df=data.frame(RRegrs.Parameters="DataFileName",Parameter.Value=as.character(DataFileName),Description="Input dataset file (Step 1)") # data frame with used parameters
+  Params.df = data.frame(RRegrs.Parameters="DataFileName",Parameter.Value=as.character(DataFileName),Description="Input dataset file (Step 1)") # data frame with used parameters
   Params.df = rbind(Params.df,data.frame(RRegrs.Parameters="PathDataSet",Parameter.Value=as.character(PathDataSet),Description="Working folder for all input and output files"))
   Params.df = rbind(Params.df,data.frame(RRegrs.Parameters="noCores",Parameter.Value=as.character(noCores),Description="No of CPU cores (0=all available; 1=no parallel; >1 = specific no. of cores)"))
   Params.df = rbind(Params.df,data.frame(RRegrs.Parameters="ResAvgs",Parameter.Value=as.character(ResAvgs),Description="Output file averaged statistics (by splits) for each regression method"))
