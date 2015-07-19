@@ -14,4 +14,21 @@ import(elasticnet)
 import(glmnet)
 import(data.table)
 
-export(RRegrs)
+export(
+  RRegrs,
+  AppendList2CSv,
+  AppendList2txt,
+  DsSplit,
+  ENETreg,
+  GLMreg,
+  LASSOreg,
+  LMreg,
+  NNreg,
+  PLSreg,
+  RemCorrs,
+  RemNear0VarCols,
+  RFreg,
+  RFRFEreg,
+  ScalingDS,
+  SVMRFEreg
+)
