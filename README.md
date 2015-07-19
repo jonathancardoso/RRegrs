@@ -31,3 +31,9 @@ Install
     > library(devtools)
     > install_github("RRegrs", "enanomapper", subdir="RRegrs")
 
+Compile from source
+-------------------
+
+    $ R CMD build RRegrs
+    $ R CMD check --as-cran RRegrs_0.0.4.tar.gz
+
