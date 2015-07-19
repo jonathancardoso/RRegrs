@@ -2905,7 +2905,11 @@ RRegrs <- function(DataFileName="ds.House.csv",PathDataSet="DataResults",noCores
   CVtypes2 = c("repeatedcv") # for complex methods we run only 10-fold CV even the user is using other parameters!
   
   # Generate path + file name = original dataset
-  inFile <- file.path(PathDataSet, DataFileName)
+  if (file.exists(DataFileName)) { # is it a full path already?
+    inFile <- DataFileName
+  } else {
+    inFile <- file.path(PathDataSet, DataFileName)
+  }
   
   sDescription=paste("=======================================================================================================",
     "RRegrs - R Regression Models",
