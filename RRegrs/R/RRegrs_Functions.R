@@ -2760,7 +2760,7 @@ ENETreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
 # RRegrs MAIN FUNCTION 
 ###############################################################################################
 
-RRegrs <- function(DataFileName="ds.House.csv",PathDataSet="DataResults",noCores=1,
+RRegrs <- function(DataFileName="ds.House.csv",DataFileSep=",",PathDataSet="DataResults",noCores=1,
   ResAvgs="RRegsResAvgs.csv",ResBySplits="RRegrsResAllSplits.csv",ResBest="RRegrsResBest.csv",
   fDet="T",fFilters="F",fScaling="T",fRemNear0Var="T",fRemCorr="T",
   fLM="T",fGLM="T",fPLS="T",fLASSO="T",fSVRM="T",fNN="T",fRF="T",fRFRFE="T",fSVMRFE="T",fENET="T",
@@ -2928,7 +2928,7 @@ RRegrs <- function(DataFileName="ds.House.csv",PathDataSet="DataResults",noCores
   # -----------------------------------
   cat("\n-> Loading original dataset ...\n")  # it can contain errors, correlations, near zero variance columns
   cat("      ---> ",inFile,"\n")
-  ds.dat0 <- read.csv(inFile,header=T)          # original dataset frame
+  ds.dat0 <- read.csv(inFile,header=T,sep=DataFileSep)          # original dataset frame
   
   # resolving the text to number errors for future calculations
   ds.indx<- colnames(ds.dat0)[2:dim(ds.dat0)[2]]                    # FEATURE names (no dependent variable)
