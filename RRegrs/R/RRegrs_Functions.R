@@ -2772,6 +2772,20 @@ RRegrs <- function(DataFileName="ds.House.csv",DataFileSep=",",PathDataSet="Data
   lassoFile="Lasso.details.csv",svrmFile="SVMRadial.details.csv",
   nnFile="NN.details.csv",rfFile="RF.details.csv",rfrfeFile="RFRFE.details.csv",svmrfeFile="SVMRFE.details.csv",
   enetFile="ENET.details.csv",fR2rule="T") { # input = file with all parameters
+
+  methodCount = 0;
+  if (fLM=="T") methodCount = methodCount + 1;
+  if (fGLM=="T") methodCount = methodCount + 1;
+  if (fPLS=="T") methodCount = methodCount + 1;
+  if (fLASSO=="T") methodCount = methodCount + 1;
+  if (fSVRM=="T") methodCount = methodCount + 1;
+  if (fNN=="T") methodCount = methodCount + 1;
+  if (fRF=="T") methodCount = methodCount + 1;
+  if (fRFRFE=="T") methodCount = methodCount + 1;
+  if (fSVMRFE=="T") methodCount = methodCount + 1;
+  if (fENET=="T") methodCount = methodCount + 1;
+
+  if (methodCount < 2) stop("You must select at least two modelling methods to compare.");
   
   # fRBFdda="T", rbfDDAFile="RBF_DDA.details.csv",negThrStep=0.5
   
