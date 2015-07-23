@@ -3651,7 +3651,12 @@ RRegrs <- function(DataFileName="ds.House.csv",DataFileSep=",",PathDataSet="Data
   # 12. Test best model with test dataset + Y randomization
   #--------------------------------------------------------------------------------------
   # ratios Yrand R2 - Best model R2 / Best model R2
-  R2Diff.Yrand <- Yrandom(ds,trainFrac,best.reg,my.stats.reg$R2.ts,noYrand,ResBestF,rfe_SVM_param_c,rfe_SVM_param_eps) # mean value of ratio (deatails are printed to output file)
+  R2Diff.Yrand = NA
+  if (noYrand >  0) {
+    R2Diff.Yrand <- Yrandom(
+      ds,trainFrac,best.reg,my.stats.reg$R2.ts,noYrand,ResBestF,rfe_SVM_param_c,rfe_SVM_param_eps
+    ) # mean value of ratio (deatails are printed to output file)
+  }
   
   # (ex param: negThrStep) 
 
@@ -3680,7 +3685,7 @@ RRegrs <- function(DataFileName="ds.House.csv",DataFileSep=",",PathDataSet="Data
   cat("Averages by method/CV type:",ResAvgsF,"\n")
   cat("Best model statistics:",ResBestF,"\n")
   cat("Best model plots:",paste(ResBestF,".repeatedcv.split",i,".pdf",sep=""),"\n")
-  cat("Best model Y-randomization plot:",paste(ResBestF,".Yrand.Hist.pdf",sep=""),"\n")
+  if (noYrand > 0) cat("Best model Y-randomization plot:",paste(ResBestF,".Yrand.Hist.pdf",sep=""),"\n")
   cat("\n* if you choose Details, additional CSV and PDF files will be create for each method.\n")
 
   return(list(BestMethod=best.reg,BestStats=my.stats.reg, Models=dfMod))
