@@ -20,13 +20,33 @@ test_that("the chemical classics data can be loaded", {
   expect_equal(9, nrow(data))
 })
 
-test_that("the method doesn't fail for just MLR", {
+test_that("the method doesn't fail for just MLR and PLS", {
+  dsData = system.file("extdata", "ds.House.csv", package = "RRegrs")
+  results = RRegrs(
+    DataFileName=dsData,
+    fLM="T",fGLM="F",fPLS="T",fLASSO="F",fSVRM="F",fNN="F",fRF="F",
+    fRFRFE="F",fSVMRFE="F",fENET="F",
+    trainFrac=0.75,iSplitTimes=3,noYrand=5,CVtypes="repeatedcv"
+  )
+})
+
+test_that("the method works without Y-randomization", {
+  dsData = system.file("extdata", "ds.House.csv", package = "RRegrs")
+  results = RRegrs(
+    DataFileName=dsData,
+    fLM="T",fGLM="F",fPLS="T",fLASSO="F",fSVRM="F",fNN="F",fRF="F",
+    fRFRFE="F",fSVMRFE="F",fENET="F",
+    trainFrac=0.75,iSplitTimes=3,noYrand=0,CVtypes="repeatedcv"
+  )
+})
+
+test_that("the method works for ds.gajewicz.csv", {
   dsData = system.file("extdata", "ds.gajewicz.csv", package = "RRegrs")
   results = RRegrs(
     DataFileName=dsData,
-    fLM="T",fGLM="F",fPLS="F",fLASSO="F",fSVRM="F",fNN="F",fRF="F",
+    fLM="T",fGLM="F",fPLS="T",fLASSO="F",fSVRM="F",fNN="F",fRF="F",
     fRFRFE="F",fSVMRFE="F",fENET="F",
-    trainFrac=0.75,iSplitTimes=3,noYrand=49,CVtypes="LOOCV"
+    trainFrac=0.75,iSplitTimes=3,noYrand=5,CVtypes="repeatedcv"
   )
 })
 
