@@ -42,7 +42,7 @@ lmFile="LM.details.csv", glmFile="GLM.details.csv", plsFile="PLS.details.csv",la
  \item{trainFrac}{ Fraction of training set from the entire dataset (default = 0.75); the rest of dataset is the test set.}
  \item{iSplitTimes}{Number of splittings the dataset into train and test (default = 10)}
  \item{noYrand}{Number of Y-Randomization (default = 100)}
- \item{CVtypes}{a character string indicating which cross validation method will be used. Default value is c("repeatedcv","LOOCV")}
+ \item{CVtypes}{a character vector indicating which cross validation method will be used. Default value is c("repeatedcv","LOOCV")}
  \item{NoNAValFile}{a character string naming the file where the data set without NA values will be stored. Default value is the "ds.NoNA.csv" file.}
  \item{No0NearVarFile}{a character string naming the file where the data set without without near zero variance values will be stored. Default value is the "ds.No0Var.csv" file.}
  \item{ScaledFile}{a character string naming the file where the scaled data set will be stored. Default value is the "ds.scaled.csv" file.}
