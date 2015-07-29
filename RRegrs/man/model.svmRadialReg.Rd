@@ -1,6 +1,7 @@
 
 \name{model.svmRadialReg}
 \alias{model.svmRadialReg}
+\alias{svmRadialReg}
 \docType{model.svmRadialReg}
 
 \title{
