@@ -26,7 +26,7 @@ SVMRFEreg(my.datf.train,my.datf.test,sCV,iSplit=1,
               RMSE is the summary metric used to select the optimal model.
 
               RFE SVM uses the RFE function of caret and the eps-svr function in ksvm from the kernlab package modeling to obtaing the best svm model with the best feature set.              
-              To control the computational nuances of the train function, trainControl is used; number of folds or resampling iterations is set to 10, and the number of completed set of folds is set to 10 (for repeated k-fold cross-validation). 
+              To control the computational nuances of the train function, trainControl is used; number of folds or resampling iterations is set to 10, and the number of completed set of folds is set to 10 (for repeated k-fold cross-validation). All three parameters are included in the grid, i.e.  sigma, C, epsilon.
               
               sCV can take the following values: boot, boot632, cv, repeatedcv, LOOCV, LGOCV (for repeated training/test splits), none (only fits one model to the entire training set), oob (only for random forest, bagged trees, bagged earth, bagged flexible discriminant analysis, or conditional tree forest models), "adaptive_cv", "adaptive_boot" or "adaptive_LGOCV".
               
