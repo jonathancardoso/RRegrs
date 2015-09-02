@@ -36,7 +36,7 @@ Install
     > install.packages("testthat") # if you want to test the package
     > install.packages("devtools") # to install from GitHub
     > library(devtools)
-    > install_github("RRegrs", "enanomapper", subdir="RRegrs")
+    > install_github("enanomapper/RRegrs", subdir="RRegrs")
 
 Compile from source
 -------------------
