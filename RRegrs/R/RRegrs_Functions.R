@@ -117,7 +117,7 @@ RemNear0VarCols <- function(ds,fDet=FALSE,outFile="ds3.No0Var.csv") {
 }
 #----------------------------------------------------------------------------------------------------------------------
 
-ScalingDS <- function(ds,s=1,c=1,fDet=FALSE,outFileName="ds4.scaled.csv") {
+ScalingDS <- function(ds,s=1,c=2,fDet=FALSE,outFileName="ds4.scaled.csv") {
   #===========================
   # Scaling dataset (Step 4)
   #===========================
@@ -136,12 +136,27 @@ ScalingDS <- function(ds,s=1,c=1,fDet=FALSE,outFileName="ds4.scaled.csv") {
   # if NORMALIZATION
   if (s==1) {
     # Scale all the features (from column c; column 1 is the predictor output)
-    DataSet.scaled <- ((ds-min(ds))/(max(ds)-min(ds))) # normalize all the columns
+    if(c==2){
+      maxs <- apply(ds[c:ncol(ds)], 2, max)
+      mins <- apply(ds[c:ncol(ds)], 2, min)
+      ds.norm.scale<-scale(ds[c:ncol(ds)], center = mins, scale = maxs - mins)
+      DataSet.scaled<-cbind(ds[,1],ds.norm.scale)
+    }else{
+      maxs <- apply(ds, 2, max)
+      mins <- apply(ds, 2, min)
+      DataSet.scaled<-scale(ds, center = mins, scale = maxs - mins)
+    }
+    
   }
   # if STADARDIZATION
   if (s==2) {
     # Scale all the features (from column c; column 1 is the predictor output)
-    DataSet.scaled <- scale(ds[c:ncol(ds)],center=TRUE,scale=TRUE)  
+    if(c==2){
+      DataSet.scaled <- scale(ds[c:ncol(ds)],center=TRUE,scale=TRUE)
+      DataSet.scaled<-cbind(ds[,1],DataSet.scaled)
+    }else{
+      DataSet.scaled<-scale(ds,center=TRUE,scale=TRUE)
+    }
   }
   
   # if other scaling
@@ -289,7 +304,6 @@ LMreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
   #==================
   # 8.1. Basic LM
   #==================
-
   net.c = my.datf.train[,1]   # make available the names of variables from training dataset
   RegrMethod <- "lm" # type of regression
   
