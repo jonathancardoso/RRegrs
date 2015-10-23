@@ -18,7 +18,7 @@ Outputs:
 
 Releases
 --------
-* Version 0.0.5 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.32578.svg)](http://dx.doi.org/10.5281/zenodo.32578)
+* Version 0.0.5 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.32580.svg)](http://dx.doi.org/10.5281/zenodo.32580)
   * Bug in function ScalingDS: normalization
   * Incomplete option in function ScalingDS: standarization
   * Bug in plot 4, function SVMRFEreg
