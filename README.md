@@ -47,6 +47,6 @@ Compile from source
 Notes for Windows
 -------------------
 
-Before to install RRegrs:
+Before installing RRegrs:
 * Update R to 3.2.2
-* Install Rtools from [https://cran.r-project.org/bin/windows/Rtools/] (https://cran.r-project.org/bin/windows/Rtools/). During the instalation specify the path to R.
+* Install Rtools with the default configuration options from [https://cran.r-project.org/bin/windows/Rtools/] (https://cran.r-project.org/bin/windows/Rtools/). 
