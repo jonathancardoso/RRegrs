@@ -1,9 +1,9 @@
 Package: RRegrs
 Type: Package
 Title: RRegrs - regression model builder
-Version: 0.0.4
-Date: 2015-07-17
-Author: Cristean R Munteanu <muntisa@gmail.com>, Georgia Tsiliki <g_tsiliki@hotmail.com>,
+Version: 0.0.5
+Date: 2015-10-23
+Author: Cristian R Munteanu <muntisa@gmail.com>, Georgia Tsiliki <g_tsiliki@hotmail.com>,
   Jose A. Seoane <seoane@stanford.edu>, Carlos Fernandez-Lozano <carlos.fernandez@udc.es>,
   Haralambos Sarimveis <hsarimv@central.ntua.gr>,
   Egon Willighagen <egon.willighagen@maastrichtuniversity.nl>
