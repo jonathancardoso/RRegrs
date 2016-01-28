@@ -59,4 +59,4 @@ Before installing RRegrs:
 Help
 -------------------
 
-For questions, suggestions, problems or praise please use the Issues tab here or subscribe to [https://groups.google.com/forum/#!forum/rregrs] (rregrs) Google group.
+For questions, suggestions, problems or praise please use the Issues tab here or subscribe to [rregrs] (https://groups.google.com/forum/#!forum/rregrs) Google group.
