@@ -55,3 +55,8 @@ Notes for Windows
 Before installing RRegrs:
 * Update R to 3.2.2
 * Install Rtools with the default configuration options from [https://cran.r-project.org/bin/windows/Rtools/] (https://cran.r-project.org/bin/windows/Rtools/). 
+
+Help
+-------------------
+
+For questions, suggestions, problems or praise please use the Issues tab here or subscribe to [https://groups.google.com/forum/#!forum/rregrs] (rregrs) Google group.
