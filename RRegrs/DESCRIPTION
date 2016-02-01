@@ -15,4 +15,5 @@ Description: Use this package to make regression models using a wide
  variety of modeling and validation methods.
 License: BSD_2_clause + file LICENSE | MIT + file LICENSE
 BugReports: https://github.com/enanomapper/RRegrs/issues
+MailingList: https://groups.google.com/forum/#!forum/rregrs
 LazyLoad: yes
