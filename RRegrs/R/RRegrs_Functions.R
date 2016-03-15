@@ -18,6 +18,8 @@
 #======================================================================================================================
 # General functions
 #======================================================================================================================
+mae <- function(pred,obs,na.rm=FALSE){mean(abs(pred - obs),na.rm=na.rm)}
+
 r2.adj.t.funct<- function(obs,pred,num.pred){
 #obs==y, pred=predicted, num.pred=number of idependent variables (predictors)
 #t: traditional formula
@@ -330,11 +332,15 @@ LMreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
     RMSEsd.tr <- 0 # formulas will be added later!
     R2sd.tr   <- 0 # formulas will be added later!
   }
+  if (sCV == "none"){ # if full training
+    RMSEsd.tr <- 0
+    R2sd.tr <- 0
+  }
   
   #------------------------------------------------
   # RMSE & R^2, for train/test respectively
   #------------------------------------------------
-  lm.train.res <- getTrainPerf(lm.fit)
+  lm.train.res <- if(sCV != "none") { getTrainPerf(lm.fit)}
   lm.test.res  <- postResample(predict(lm.fit,my.datf.test),my.datf.test[,1])
   
   #------------------------------------------------
@@ -347,6 +353,8 @@ LMreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
   
   ds.full     <- rbind(my.datf.train,my.datf.test)
   pred.both   <- predict(lm.fit,ds.full)       # predicted Y
+  mae.tr      <- mae(my.datf.train[,1],pred.tr)
+  mae.ts      <- mae(my.datf.test[,1],pred.ts)
   adjR2.tr    <- r2.adj.funct(my.datf.train[,1],pred.tr,noFeats.fit)
   adjR2.ts    <- r2.adj.funct(my.datf.test[,1],pred.ts,noFeats.fit)
   corP.ts     <- cor(my.datf.test[,1],pred.ts)
@@ -365,10 +373,12 @@ LMreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
                    "adjR2.tr"  = as.numeric(adjR2.tr),
                    "RMSE.tr"   = as.numeric(RMSE.tr),
                    "R2.tr"     = as.numeric(R2.tr),
+                   "MAE.tr"    = as.numeric(mae.tr),
                    "RMSEsd.tr" = as.numeric(RMSEsd.tr),
                    "R2sd.tr"   = as.numeric(R2sd.tr),
                    "adjR2.ts"= as.numeric(adjR2.ts),
                    "RMSE.ts" = as.numeric((lm.test.res["RMSE"][[1]])),
+                   "MAE.ts"  = as.numeric(mae.ts),
                    "R2.ts"   = as.numeric((lm.test.res["Rsquared"][[1]])),
                    "corP.ts" = as.numeric(corP.ts),
                    "adjR2.both" = as.numeric(adjR2.both),
@@ -545,7 +555,7 @@ GLMreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
   #------------------------------------------------
   # RMSE & R^2, for train/test respectively
   #------------------------------------------------
-  lm.train.res <- getTrainPerf(glm.fit)
+  lm.train.res <- if(sCV != "none") { getTrainPerf(glm.fit)}
   lm.test.res  <- postResample(predict(glm.fit,my.datf.test),my.datf.test[,1])
   
   #------------------------------------------------
@@ -558,6 +568,8 @@ GLMreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
   
   ds.full     <- rbind(my.datf.train,my.datf.test)
   pred.both   <- predict(glm.fit,ds.full)       # predicted Y
+  mae.tr      <- mae(my.datf.train[,1],pred.tr)
+  mae.ts      <- mae(my.datf.test[,1],pred.ts)
   adjR2.tr    <- r2.adj.funct(my.datf.train[,1],pred.tr,noFeats.fit)
   adjR2.ts    <- r2.adj.funct(my.datf.test[,1],pred.ts,noFeats.fit)
   corP.ts     <- cor(my.datf.test[,1],pred.ts)
@@ -575,11 +587,13 @@ GLMreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
                    "ModelFeats"   = Feats.fit,
                    "adjR2.tr"  = as.numeric(adjR2.tr),
                    "RMSE.tr"   = as.numeric(RMSE.tr),
+                   "MAE.tr"    = as.numeric(mae.tr),
                    "R2.tr"     = as.numeric(R2.tr),
                    "RMSEsd.tr" = as.numeric(RMSEsd.tr),
                    "R2sd.tr"   = as.numeric(R2sd.tr),
                    "adjR2.ts"= as.numeric(adjR2.ts),
                    "RMSE.ts" = as.numeric((lm.test.res["RMSE"][[1]])),
+                   "MAE.ts"    = as.numeric(mae.ts),
                    "R2.ts"   = as.numeric((lm.test.res["Rsquared"][[1]])),
                    "corP.ts" = as.numeric(corP.ts),
                    "adjR2.both" = as.numeric(adjR2.both),
@@ -749,7 +763,7 @@ PLSreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
   #------------------------------------------------
   # RMSE & R^2, for train/test respectively
   #------------------------------------------------
-  lm.train.res <- getTrainPerf(pls.fit)
+  lm.train.res <- if(sCV != "none") { getTrainPerf(pls.fit)}
   lm.test.res  <- postResample(predict(pls.fit,my.datf.test),my.datf.test[,1])
   
   #------------------------------------------------
@@ -762,6 +776,8 @@ PLSreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
   
   ds.full     <- rbind(my.datf.train,my.datf.test)
   pred.both   <- predict(pls.fit,ds.full)       # predicted Y
+  mae.tr      <- mae(my.datf.train[,1],pred.tr)
+  mae.ts      <- mae(my.datf.test[,1],pred.ts)
   adjR2.tr    <- r2.adj.funct(my.datf.train[,1],pred.tr,noFeats.fit)
   adjR2.ts    <- r2.adj.funct(my.datf.test[,1],pred.ts,noFeats.fit)
   corP.ts     <- cor(my.datf.test[,1],pred.ts)
@@ -780,12 +796,14 @@ PLSreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
                    "adjR2.tr"  = as.numeric(adjR2.tr),
                    
                    "RMSE.tr"   = as.numeric(min(RMSE.tr)),  # these 4 lines correspond to the min of RMSE.tr !!!
+                   "MAE.tr"    = as.numeric(mae.tr),
                    "R2.tr"     = as.numeric(R2.tr[which.min(RMSE.tr)]),  
                    "RMSEsd.tr" = as.numeric(RMSEsd.tr[which.min(RMSE.tr)]),
                    "R2sd.tr"   = as.numeric(R2sd.tr[which.min(RMSE.tr)]),
                    
                    "adjR2.ts"= as.numeric(adjR2.ts),
                    "RMSE.ts" = as.numeric((lm.test.res["RMSE"][[1]])),
+                   "MAE.ts"    = as.numeric(mae.ts),
                    "R2.ts"   = as.numeric((lm.test.res["Rsquared"][[1]])),
                    "corP.ts" = as.numeric(corP.ts),
                    "adjR2.both" = as.numeric(adjR2.both),
@@ -937,7 +955,7 @@ LASSOreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") 
   #------------------------------------------------
   # RMSE & R^2, for train/test respectively
   #------------------------------------------------
-  lm.train.res <- getTrainPerf(las.fit)
+  lm.train.res <- if(sCV != "none") { getTrainPerf(las.fit)}
   lm.test.res  <- postResample(predict(las.fit,my.datf.test),my.datf.test[,1])
   
   #------------------------------------------------
@@ -950,6 +968,8 @@ LASSOreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") 
   
   ds.full     <- rbind(my.datf.train,my.datf.test)
   pred.both   <- predict(las.fit,ds.full)       # predicted Y
+  mae.tr      <- mae(my.datf.train[,1],pred.tr)
+  mae.ts      <- mae(my.datf.test[,1],pred.ts)
   adjR2.tr    <- r2.adj.funct(my.datf.train[,1],pred.tr,noFeats.fit)
   adjR2.ts    <- r2.adj.funct(my.datf.test[,1],pred.ts,noFeats.fit)
   corP.ts     <- cor(my.datf.test[,1],pred.ts)
@@ -968,12 +988,14 @@ LASSOreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") 
                    "adjR2.tr"  = as.numeric(adjR2.tr),
                    
                    "RMSE.tr"   = as.numeric(min(RMSE.tr)),  # these 4 lines correspond to the min of RMSE.tr !!!
+                   "MAE.tr"    = as.numeric(mae.tr),
                    "R2.tr"     = as.numeric(R2.tr[which.min(RMSE.tr)]),  
                    "RMSEsd.tr" = as.numeric(RMSEsd.tr[which.min(RMSE.tr)]),
                    "R2sd.tr"   = as.numeric(R2sd.tr[which.min(RMSE.tr)]),
            
                    "adjR2.ts"= as.numeric(adjR2.ts),
                    "RMSE.ts" = as.numeric((lm.test.res["RMSE"][[1]])),
+                   "MAE.ts"    = as.numeric(mae.ts),
                    "R2.ts"   = as.numeric((lm.test.res["Rsquared"][[1]])),
                    "corP.ts" = as.numeric(corP.ts),
                    "adjR2.both" = as.numeric(adjR2.both),
@@ -1125,7 +1147,7 @@ LASSOreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") 
 #   #------------------------------------------------
 #   # RMSE & R^2, for train/test respectively
 #   #------------------------------------------------
-#   lm.train.res <- getTrainPerf(rbf.fit)
+#   lm.train.res <- if(sCV != "none") { getTrainPerf(rbf.fit)}
 #   lm.test.res  <- postResample(predict(rbf.fit,my.datf.test),my.datf.test[,1])
 #   
 #   #------------------------------------------------
@@ -1316,7 +1338,7 @@ SVRMreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="",cs
   #------------------------------------------------
   # RMSE & R^2, for train/test respectively
   #------------------------------------------------
-  lm.train.res <- getTrainPerf(svmL.fit)
+  lm.train.res <- if(sCV != "none") { getTrainPerf(svmL.fit)}
   lm.test.res  <- postResample(predict(svmL.fit,my.datf.test),my.datf.test[,1])
   
   #------------------------------------------------
@@ -1329,6 +1351,8 @@ SVRMreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="",cs
   
   ds.full     <- rbind(my.datf.train,my.datf.test)
   pred.both   <- predict(svmL.fit,ds.full)       # predicted Y
+  mae.tr      <- mae(my.datf.train[,1],pred.tr)
+  mae.ts      <- mae(my.datf.test[,1],pred.ts)
   adjR2.tr    <- r2.adj.funct(my.datf.train[,1],pred.tr,noFeats.fit)
   adjR2.ts    <- r2.adj.funct(my.datf.test[,1],pred.ts,noFeats.fit)
   corP.ts     <- cor(my.datf.test[,1],pred.ts)
@@ -1347,12 +1371,14 @@ SVRMreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="",cs
                    "adjR2.tr"  = as.numeric(adjR2.tr),
                    
                    "RMSE.tr"   = as.numeric(min(RMSE.tr)),  # these 4 lines correspond to the min of RMSE.tr !!!
+                   "MAE.tr"    = as.numeric(mae.tr),
                    "R2.tr"     = as.numeric(R2.tr[which.min(RMSE.tr)]),  
                    "RMSEsd.tr" = as.numeric(RMSEsd.tr[which.min(RMSE.tr)]),
                    "R2sd.tr"   = as.numeric(R2sd.tr[which.min(RMSE.tr)]),
                    
                    "adjR2.ts"= as.numeric(adjR2.ts),
                    "RMSE.ts" = as.numeric((lm.test.res["RMSE"][[1]])),
+                   "MAE.ts"    = as.numeric(mae.ts),
                    "R2.ts"   = as.numeric((lm.test.res["Rsquared"][[1]])),
                    "corP.ts" = as.numeric(corP.ts),
                    "adjR2.both" = as.numeric(adjR2.both),
@@ -1509,7 +1535,7 @@ NNreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
   #------------------------------------------------
   # RMSE & R^2, for train/test respectively
   #------------------------------------------------
-  lm.train.res <- getTrainPerf(nn.fit)
+  lm.train.res <- if(sCV != "none") { getTrainPerf(nn.fit)}
   lm.test.res  <- postResample(predict(nn.fit,my.datf.test),my.datf.test[,1])
   
   #------------------------------------------------
@@ -1522,6 +1548,8 @@ NNreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
   
   ds.full     <- rbind(my.datf.train,my.datf.test)
   pred.both   <- predict(nn.fit,ds.full)       # predicted Y
+  mae.tr      <- mae(my.datf.train[,1],pred.tr)
+  mae.ts      <- mae(my.datf.test[,1],pred.ts)
   adjR2.tr    <- r2.adj.funct(my.datf.train[,1],pred.tr,noFeats.fit)
   adjR2.ts    <- r2.adj.funct(my.datf.test[,1],pred.ts,noFeats.fit)
   corP.ts     <- cor(my.datf.test[,1],pred.ts)
@@ -1540,12 +1568,14 @@ NNreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
                    "adjR2.tr"  = as.numeric(adjR2.tr),
                    
                    "RMSE.tr"   = as.numeric(min(RMSE.tr)),  # these 4 lines correspond to the min of RMSE.tr !!!
+                   "MAE.tr"    = as.numeric(mae.tr),
                    "R2.tr"     = as.numeric(R2.tr[which.min(RMSE.tr)]),  
                    "RMSEsd.tr" = as.numeric(RMSEsd.tr[which.min(RMSE.tr)]),
                    "R2sd.tr"   = as.numeric(R2sd.tr[which.min(RMSE.tr)]),
                    
                    "adjR2.ts"= as.numeric(adjR2.ts),
                    "RMSE.ts" = as.numeric((lm.test.res["RMSE"][[1]])),
+                   "MAE.ts"    = as.numeric(mae.ts),
                    "R2.ts"   = as.numeric((lm.test.res["Rsquared"][[1]])),
                    "corP.ts" = as.numeric(corP.ts),
                    "adjR2.both" = as.numeric(adjR2.both),
@@ -1722,6 +1752,8 @@ PLSregWSel <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile=""
   
   ds.full     <- rbind(my.datf.train,my.datf.test)
   pred.both   <- predict(pls.fit,ds.full)       # predicted Y
+  mae.tr      <- mae(my.datf.train[,1],pred.tr)
+  mae.ts      <- mae(my.datf.test[,1],pred.ts)
   adjR2.tr    <- r2.adj.funct(my.datf.train[,1],pred.tr,noFeats.fit)
   adjR2.ts    <- r2.adj.funct(my.datf.test[,1],pred.ts,noFeats.fit)
   corP.ts     <- cor(my.datf.test[,1],pred.ts)
@@ -1740,12 +1772,14 @@ PLSregWSel <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile=""
                    "adjR2.tr"     = as.numeric(adjR2.tr),
                    
                    "RMSE.tr"   = as.numeric(RMSE.tr),  # these 4 lines correspond to the min of RMSE.tr !!!
+                   "MAE.tr"    = as.numeric(mae.tr),
                    "R2.tr"     = as.numeric(R2.tr),  
                    "RMSEsd.tr" = as.numeric(RMSEsd.tr),
                    "R2sd.tr"   = as.numeric(R2sd.tr),
                    
                    "adjR2.ts"= as.numeric(adjR2.ts),
                    "RMSE.ts" = as.numeric((lm.test.res["RMSE"][[1]])),
+                   "MAE.ts"    = as.numeric(mae.ts),
                    "R2.ts"   = as.numeric((lm.test.res["Rsquared"][[1]])),
                    "corP.ts" = as.numeric(corP.ts),
                    "adjR2.both" = as.numeric(adjR2.both),
@@ -2023,6 +2057,8 @@ RFreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
   
   ds.full     <- rbind(my.datf.train,my.datf.test)
   pred.both   <- predict(rf.fit,ds.full)       # predicted Y
+  mae.tr      <- mae(my.datf.train[,1],pred.tr)
+  mae.ts      <- mae(my.datf.test[,1],pred.ts)
   adjR2.tr    <- r2.adj.funct(my.datf.train[,1],pred.tr,noFeats.fit)
   adjR2.ts    <- r2.adj.funct(my.datf.test[,1],pred.ts,noFeats.fit)
   corP.ts     <- cor(my.datf.test[,1],pred.ts)
@@ -2040,11 +2076,13 @@ RFreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
                    "ModelFeats"   = Feats.fit,
                    "adjR2.tr"  = as.numeric(adjR2.tr),
                    "RMSE.tr"   = as.numeric(RMSE.tr),
+                   "MAE.tr"    = as.numeric(mae.tr),
                    "R2.tr"     = as.numeric(R2.tr),
                    "RMSEsd.tr" = as.numeric(RMSEsd.tr),
                    "R2sd.tr"   = as.numeric(R2sd.tr),
                    "adjR2.ts"= as.numeric(adjR2.ts),
                    "RMSE.ts" = as.numeric((rf.test.res["RMSE"])),
+                   "MAE.ts"    = as.numeric(mae.ts),
                    "R2.ts"   = as.numeric((rf.test.res["Rsquared"])),
                    "corP.ts" = as.numeric(corP.ts),
                    "adjR2.both" = as.numeric(adjR2.both),
@@ -2222,6 +2260,8 @@ SVMRFEreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="",
   
   ds.full     <- rbind(my.datf.train,my.datf.test)
   pred.both   <- predict(rfesvm.fit,ds.full)       # predicted Y
+  mae.tr      <- mae(my.datf.train[,1],pred.tr)
+  mae.ts      <- mae(my.datf.test[,1],pred.ts)
   adjR2.tr    <- r2.adj.funct(my.datf.train[,1],pred.tr,noFeats.fit)
   adjR2.ts    <- r2.adj.funct(my.datf.test[,1],pred.ts,noFeats.fit)
   corP.ts     <- cor(my.datf.test[,1],pred.ts)
@@ -2239,11 +2279,13 @@ SVMRFEreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="",
                    "ModelFeats"   = Feats.fit,
                    "adjR2.tr"  = as.numeric(adjR2.tr),
                    "RMSE.tr"   = as.numeric(RMSE.tr),
+                   "MAE.tr"    = as.numeric(mae.tr),
                    "R2.tr"     = as.numeric(R2.tr),
                    "RMSEsd.tr" = as.numeric(RMSEsd.tr),
                    "R2sd.tr"   = as.numeric(R2sd.tr),
                    "adjR2.ts"= as.numeric(adjR2.ts),
                    "RMSE.ts" = as.numeric((rfesvm.test.res["RMSE"])),
+                   "MAE.ts"    = as.numeric(mae.ts),
                    "R2.ts"   = as.numeric((rfesvm.test.res["Rsquared"])),
                    "corP.ts" = as.numeric(corP.ts),
                    "adjR2.both" = as.numeric(adjR2.both),
@@ -2411,6 +2453,8 @@ RFRFEreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") 
   
   ds.full     <- rbind(my.datf.train,my.datf.test)
   pred.both   <- predict(rferf.fit,ds.full)       # predicted Y
+  mae.tr      <- mae(my.datf.train[,1],pred.tr)
+  mae.ts      <- mae(my.datf.test[,1],pred.ts)
   adjR2.tr    <- r2.adj.funct(my.datf.train[,1],pred.tr,noFeats.fit)
   adjR2.ts    <- r2.adj.funct(my.datf.test[,1],pred.ts,noFeats.fit)
   corP.ts     <- cor(my.datf.test[,1],pred.ts)
@@ -2428,11 +2472,13 @@ RFRFEreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") 
                    "ModelFeats"   = Feats.fit,
                    "adjR2.tr"  = as.numeric(adjR2.tr),
                    "RMSE.tr"   = as.numeric(RMSE.tr),
+                   "MAE.tr"    = as.numeric(mae.tr),
                    "R2.tr"     = as.numeric(R2.tr),
                    "RMSEsd.tr" = as.numeric(RMSEsd.tr),
                    "R2sd.tr"   = as.numeric(R2sd.tr),
                    "adjR2.ts"= as.numeric(adjR2.ts),
                    "RMSE.ts" = as.numeric((rfesvm.test.res["RMSE"])),
+                   "MAE.ts"    = as.numeric(mae.ts),
                    "R2.ts"   = as.numeric((rfesvm.test.res["Rsquared"])),
                    "corP.ts" = as.numeric(corP.ts),
                    "adjR2.both" = as.numeric(adjR2.both),
@@ -2620,7 +2666,7 @@ ENETreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
   #------------------------------------------------
   # RMSE & R^2, for train/test respectively
   #------------------------------------------------
-  lm.train.res <- getTrainPerf(enet.fit)
+  lm.train.res <- if(sCV != "none") { getTrainPerf(enet.fit)}
   lm.test.res  <- postResample(predict(enet.fit,my.datf.test),my.datf.test[,1])
   
   #------------------------------------------------
@@ -2633,6 +2679,8 @@ ENETreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
   
   ds.full     <- rbind(my.datf.train,my.datf.test)
   pred.both   <- predict(enet.fit,ds.full)       # predicted Y
+  mae.tr      <- mae(my.datf.train[,1],pred.tr)
+  mae.ts      <- mae(my.datf.test[,1],pred.ts)
   adjR2.tr    <- r2.adj.funct(my.datf.train[,1],pred.tr,noFeats.fit)
   adjR2.ts    <- r2.adj.funct(my.datf.test[,1],pred.ts,noFeats.fit)
   corP.ts     <- cor(my.datf.test[,1],pred.ts)
@@ -2651,12 +2699,14 @@ ENETreg <- function(my.datf.train,my.datf.test,sCV,iSplit=1,fDet=F,outFile="") {
                    "adjR2.tr"  = as.numeric(adjR2.tr),
                    
                    "RMSE.tr"   = as.numeric(min(RMSE.tr)),  # these 4 lines correspond to the min of RMSE.tr !!!
+                   "MAE.tr"    = as.numeric(mae.tr),
                    "R2.tr"     = as.numeric(R2.tr[which.min(RMSE.tr)]),  
                    "RMSEsd.tr" = as.numeric(RMSEsd.tr[which.min(RMSE.tr)]),
                    "R2sd.tr"   = as.numeric(R2sd.tr[which.min(RMSE.tr)]),
                    
                    "adjR2.ts"= as.numeric(adjR2.ts),
                    "RMSE.ts" = as.numeric((lm.test.res["RMSE"][[1]])),
+                   "MAE.ts"    = as.numeric(mae.ts),
                    "R2.ts"   = as.numeric((lm.test.res["Rsquared"][[1]])),
                    "corP.ts" = as.numeric(corP.ts),
                    "adjR2.both" = as.numeric(adjR2.both),
