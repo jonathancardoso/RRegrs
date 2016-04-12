@@ -3080,7 +3080,7 @@ RRegrs <- function(DataFileName="ds.House.csv",DataFileSep=",",PathDataSet="Data
   }
   
   # Check data has at least 5 columns for meaningful analysis
-  if(dim(ds)[2] < 5 || dim(ds)[1] < 3){
+  if(dim(ds)[2] < 3 || dim(ds)[1] < 3){
   print(c(dim(ds)))
   stop(paste("Your corrected data set has dimensions:", paste(as.character(dim(ds)),collapse=', '),". Try repeating analysis without filtering options.",sep=''))
   }
